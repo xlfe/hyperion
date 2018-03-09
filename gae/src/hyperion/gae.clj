@@ -26,14 +26,16 @@
       (throw (javax.management.openmbean.InvalidKeyException. (.getMessage e))))))
 
 (defn- build-native [record]
-  (try
+  (if-let [parent (:parent record)]
+   (Entity. (:kind record) (pack-key parent))
+   (try
     (Entity. (pack-key (:key record)))
     (catch IllegalArgumentException e
-      (Entity. (:kind record)))))
+      (Entity. (:kind record))))))
 
 (defn pack-entity [entity]
   (let [native (build-native entity)]
-    (doseq [[field value] (dissoc entity :kind :key )]
+    (doseq [[field value] (dissoc entity :kind :key :parent)]
       (.setProperty native (name field) value))
     native))
 

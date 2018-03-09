@@ -1,4 +1,4 @@
-(defproject hyperion/hyperion-gae "3.7.1"
+(defproject hyperion/hyperion-gae "3.7.2-SNAPSHOT"
   :description "Google App Engine Datastore for Hyperion"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [hyperion/hyperion-api "3.7.1"]
