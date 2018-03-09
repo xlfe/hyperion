@@ -34,9 +34,12 @@
       (Entity. (:kind record))))))
 
 (defn pack-entity [entity]
-  (let [native (build-native entity)]
-    (doseq [[field value] (dissoc entity :kind :key :parent)]
-      (.setProperty native (name field) value))
+  (let [native (build-native entity)
+        indexed (:__indexed entity)]
+    (doseq [[field value] (dissoc entity :kind :key :parent :__indexed)]
+      (if (or (not indexed) (some #{field} indexed))
+       (.setProperty native (name field) value)
+       (.setUnindexedProperty native (name field) value)))
     native))
 
 (defn unpack-entity [native]
