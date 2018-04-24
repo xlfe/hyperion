@@ -6,10 +6,11 @@
             [hyperion.abstr :refer [Datastore]]
             [hyperion.filtering :as filter]
             [hyperion.gae.types]
+            [hyperion.api]
             [hyperion.sorting :as sort])
   (:import [com.google.appengine.api.datastore Entity Entities Query DatastoreService DatastoreServiceFactory Query$FilterOperator
             Query$SortDirection FetchOptions$Builder EntityNotFoundException KeyFactory Key]
-            [java.lang IllegalArgumentException]))
+           [java.lang IllegalArgumentException]))
 
 (defn key? [key]
   (isa? (class key) Key))
@@ -41,6 +42,10 @@
        (.setProperty native (name field) value)
        (.setUnindexedProperty native (name field) value)))
     native))
+
+
+(defmethod hyperion.api/after-load :default [record]
+           (dissoc record :__indexed))
 
 (defn unpack-entity [native]
   (reduce
