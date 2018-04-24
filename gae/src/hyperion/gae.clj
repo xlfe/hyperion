@@ -43,10 +43,6 @@
        (.setUnindexedProperty native (name field) value)))
     native))
 
-
-(defmethod hyperion.api/after-load :default [record]
-           (dissoc record :__indexed))
-
 (defn unpack-entity [native]
   (reduce
     (fn [record entry]
