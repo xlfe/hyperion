@@ -3,7 +3,7 @@
             [chee.util :refer [->options]]
             [clojure.string :as str]
             [hyperion.log :as log]
-            [hyperion.abstr :refer [Datastore]]
+            [hyperion.abstr :refer [->kind spec-for Datastore]]
             [hyperion.filtering :as filter]
             [hyperion.gae.types]
             [hyperion.api]
@@ -36,7 +36,7 @@
 
 (defn pack-entity [entity]
   (let [native (build-native entity)
-        indexed (:__indexed entity)]
+        indexed (or (:__indexed entity) (get-in (spec-for (->kind entity)) [:__indexed :default]))]
     (doseq [[field value] (dissoc entity :kind :key :parent :__indexed)]
       (if (or (not indexed) (some #{field} indexed))
        (.setProperty native (name field) value)
